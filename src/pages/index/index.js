@@ -1,5 +1,6 @@
 import '../../style/main.css';
 import { GetAuthorizationHeader } from '../../utils/commonApi';
+import { cityList } from '../../data';
 
 /**
  * 頁面載入處理事件
@@ -157,48 +158,76 @@ window.addEventListener('load', () => {
         });
     }
 
-    // 選取自行車的路線
-    const bikeRoute = document.querySelector('#bikeRoute');
-    function getRoutesData() {
-        axios({
-            method: 'get',
-            url: 'https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/Kaohsiung',
-            headers: GetAuthorizationHeader(),
-        })
-            .then(response => {
-                console.log('自行車的路線', response);
-                const routeData = response.data;
+    // 選取道路的縣市
+    const renderDataRecord = () => {
+        const cityElement = document.getElementById('bikeCity');
 
-                let str = '';
-                routeData.forEach(item => {
-                    str += `<option value="${item.RouteName}">${item.RouteName}</option>`;
-                });
-                bikeRoute.innerHTML = str;
+        Object.values(cityList).forEach(element => {
+            cityElement.innerHTML += `<option class="form-select-city" value="">${element}</option>`;
+        });
+    };
 
-                bikeRoute.addEventListener('change', e => {
-                    const value = e.target.value;
-                    // console.log(value)
+    renderDataRecord();
 
-                    if (myLayer) {
-                        // console.log(myLayer);
-                        mymap.removeLayer(myLayer);
-                    }
+    const renderDefaultZone = () => {
+        const cityElement = document.getElementById('bikeRoute');
+        cityElement.innerHTML += `<option class="form-select" value="">請先選擇城市</option>`;
+    };
 
-                    routeData.forEach(item => {
-                        // console.log(item)
-                        if (item.RouteName === value) {
-                            const geo = item.Geometry;
-                            // console.log(geo)
+    renderDefaultZone();
 
-                            // 畫線的方法
-                            polyLine(geo);
-                        }
-                    });
-                });
+    // 抓取選取文字
+    const cityElement = document.getElementById('bikeCity');
+    cityElement.addEventListener('change', () => {
+        const selectCityIndex = cityElement.selectedIndex;
+        const cityKeys = Object.keys(cityList);
+        const area = cityKeys[selectCityIndex];
+        console.log(area);
+        // 選取自行車的路線
+        console.log(`https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`);
+        const areaURL = `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`;
+        const bikeRoute = document.querySelector('#bikeRoute');
+        function getRoutesData() {
+            axios({
+                method: 'get',
+                url: areaURL,
+                headers: GetAuthorizationHeader(),
             })
-            .catch(error => console.log('error', error));
-    }
-    getRoutesData();
+                .then(response => {
+                    console.log('自行車的路線', response);
+                    const routeData = response.data;
+
+                    let str = '';
+                    routeData.forEach(item => {
+                        str += `<option value="${item.RouteName}">${item.RouteName}</option>`;
+                    });
+                    bikeRoute.innerHTML = str;
+
+                    bikeRoute.addEventListener('change', e => {
+                        const value = e.target.value;
+                        // console.log(value)
+
+                        if (myLayer) {
+                            // console.log(myLayer);
+                            mymap.removeLayer(myLayer);
+                        }
+
+                        routeData.forEach(item => {
+                            // console.log(item)
+                            if (item.RouteName === value) {
+                                const geo = item.Geometry;
+                                // console.log(geo)
+
+                                // 畫線的方法
+                                polyLine(geo);
+                            }
+                        });
+                    });
+                })
+                .catch(error => console.log('error', error));
+        }
+        getRoutesData();
+    });
 
     // 畫出自行車的路線 wicket 套件
     let myLayer = null;
