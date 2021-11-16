@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Bike</title>
+        <title>LULU</title>
         <!-- leaflet css-->
         <link
             rel="stylesheet"
@@ -12,14 +12,41 @@
             integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
             crossorigin=""
         />
+        <!-- fontawesome -->
+        <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+            integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm"
+            crossorigin="anonymous"
+        />
+        <!-- Google Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" />
     </head>
     <body>
-        <select class="form-select-city" id="bikeCity" aria-label="縣市"> </select>
-        <select class="form-select" id="bikeRoute" aria-label="自行車道"> </select>
-        <!-- <button id="routeBtn">Go</button> -->
-        <p><button id="testClick">Show my location</button></p>
-        <div id="out"></div>
-        <div id="map"></div>
+        <div class="container">
+            <div class="sideBar">
+                <div class="logoBox">
+                    <img class="logoBox-logo" src="./src/image/lululogo.png" alt="嚕路Logo" />
+                    <span class="title1">嚕路</span><span class="title2">自行車道地圖資訊整合網</span>
+                </div>
+                <div class="select-group">
+                    <select class="form-select-city" id="bikeCity" aria-label="縣市"> </select>
+                    <select class="form-select" id="bikeRoute" aria-label="自行車道"> </select>
+                </div>
+            </div>
+            <div class="mapdiv">
+                <button id="testClick" class="myMOUSE"><i class="fas fa-location-arrow"></i></button>
+                <div id="map"></div>
+            </div>
+        </div>
+        <div class="box"></div>
+
         <!-- leaflet js-->
         <script
             src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"

@@ -6,7 +6,7 @@ import { cityList } from '../../data';
  * 頁面載入處理事件
  */
 window.addEventListener('load', () => {
-    var mymap = L.map('map').setView([25.0107036, 121.5040648], 13);
+    var mymap = L.map('map').setView([25.0107036, 121.5040648], 15);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution:
@@ -71,7 +71,6 @@ window.addEventListener('load', () => {
     function getAvailableData(longitude, latitude) {
         axios({
             method: 'get',
-            // url: 'https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/Kaohsiung',
             url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
             headers: GetAuthorizationHeader(),
         })
@@ -100,15 +99,22 @@ window.addEventListener('load', () => {
     // 標記所在位置附近 Ubike 站
     function setMarker() {
         filterData.forEach(item => {
-            L.marker([item.StationPosition.PositionLat, item.StationPosition.PositionLon])
+            const myIcon = L.icon({
+                iconUrl: './src/image/YoubikePin.png',
+            });
+            L.marker([item.StationPosition.PositionLat, item.StationPosition.PositionLon], {
+                icon: myIcon,
+            })
                 .addTo(mymap)
                 .bindPopup(
                     `<div class="bike-cards">
     <div class="bike-card">
-        <h5 class="card-title">${item.StationName.Zh_tw}</h5>
-        <h6 class="card-subtitle">${item.StationAddress.Zh_tw}</h6>
-        <p class="card-text">可租借車數：${item.AvailableRentBikes}</p>
-        <p class="card-text">可歸還車數：${item.AvailableReturnBikes}</p>
+        <h2 class="card-title">${item.StationName.Zh_tw}</h2>
+        <h5 class="card-subtitle">${item.StationAddress.Zh_tw}</h5>
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="card-text">可租借車數：${item.AvailableRentBikes}</span></br>
+        <i class="fas fa-sign-in-alt"></i>
+        <span class="card-text">可歸還車數：${item.AvailableReturnBikes}</span>
     </div>
     </div>`
                 );
@@ -175,6 +181,8 @@ window.addEventListener('load', () => {
                                 // console.log(geo)
                                 // 畫線的方法
                                 polyLine(geo);
+
+                                // 抓取自行車道周邊車站
                                 const locationArray = item.Geometry.match(/[^MULTILINESTRING+^\(+^\+^ ),]+/g);
                                 const routeLongitude = locationArray.slice(0, 1);
                                 const routeLatitude = locationArray.slice(1, 2);
@@ -189,8 +197,6 @@ window.addEventListener('load', () => {
                 .catch(error => console.log('error', error));
         }
         getRoutesData();
-
-        // 自行車道周邊車站
     });
 
     // 畫出自行車的路線 wicket 套件
@@ -203,7 +209,7 @@ window.addEventListener('load', () => {
 
         // 畫線的style
         const myStyle = {
-            color: '#ff0000',
+            color: '#55B724',
             weight: 5,
             opacity: 0.65,
         };
@@ -216,6 +222,7 @@ window.addEventListener('load', () => {
         mymap.fitBounds(myLayer.getBounds());
     }
 
+    // 渲染自行車道周邊車站
     function setMarkerOfRoute(routeLongitude, routeLatitude) {
         console.log('車道代表經度', routeLongitude);
         console.log('車道代表緯度', routeLatitude);
