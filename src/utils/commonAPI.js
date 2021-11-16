@@ -1,7 +1,7 @@
-export const station_url = `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/{Taichung}?$top=30&$format=JSON`;
-export const available_url = `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/Taichung?$top=30&$format=JSON`;
-export const bikeRoute_url = `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/Taichung?$top=30&$format=JSON`;
-export const nearbyStation_utl = `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/NearBy?$top=30&$spatialFilter=nearby(25.0107036%2C%20121.5040648%2C%20500)&$format=JSON`;
+// export const station_url = `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/{Taichung}?$top=30&$format=JSON`;
+// export const available_url = `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/Taichung?$top=30&$format=JSON`;
+// export const bikeRoute_url = `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/Taichung?$top=30&$format=JSON`;
+// export const nearbyStation_utl = `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/NearBy?$top=30&$spatialFilter=nearby(25.0107036%2C%20121.5040648%2C%20500)&$format=JSON`;
 
 /**
  * 頁面載入處理事件

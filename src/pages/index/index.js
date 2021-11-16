@@ -18,12 +18,6 @@ window.addEventListener('load', () => {
         accessToken: 'pk.eyJ1Ijoic2FuZHlsZWUiLCJhIjoiY2t3MGR4d2RsMHh4ZzJvbm9wb3dzNG9pbCJ9.kpIV-p6GnIpY0QIVGl0Svg',
     }).addTo(mymap);
 
-    // 標記 icon
-    const marker = L.marker([25.0107036, 121.5040648])
-        .addTo(mymap)
-        .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-        .openPopup();
-
     // navigator web api 獲取所在位置
 
     testClick.addEventListener('click', () => {
@@ -54,42 +48,6 @@ window.addEventListener('load', () => {
             );
         }
     }
-
-    // 抓取位置測試
-
-    // function geoFindMe() {
-    //     var output = document.getElementById('out');
-
-    //     if (!navigator.geolocation) {
-    //         output.innerHTML = '<p>Geolocation is not supported by your browser</p>';
-    //         return;
-    //     }
-
-    //     function success(position) {
-    //         var latitude = position.coords.latitude;
-    //         var longitude = position.coords.longitude;
-
-    //         output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
-
-    //         var img = new Image();
-    //         img.src =
-    //             'http://maps.googleapis.com/maps/api/staticmap?center=' +
-    //             latitude +
-    //             ',' +
-    //             longitude +
-    //             '&zoom=13&size=300x300&sensor=false';
-
-    //         output.appendChild(img);
-    //     }
-
-    //     function error() {
-    //         output.innerHTML = 'Unable to retrieve your location';
-    //     }
-
-    //     output.innerHTML = '<p>Locating…</p>';
-
-    //     navigator.geolocation.getCurrentPosition(success, error);
-    // }
 
     // 串接附近的自行車租借站位資料
     let data = [];
@@ -139,19 +97,18 @@ window.addEventListener('load', () => {
             .catch(error => console.log('error', error));
     }
 
-    // 標記 icon
+    // 標記所在位置附近 Ubike 站
     function setMarker() {
         filterData.forEach(item => {
-            // console.log(item.StationPosition.PositionLon, item.StationPosition.PositionLat)
             L.marker([item.StationPosition.PositionLat, item.StationPosition.PositionLon])
                 .addTo(mymap)
                 .bindPopup(
-                    `<div class="card">
-    <div class="card-body">
+                    `<div class="bike-cards">
+    <div class="bike-card">
         <h5 class="card-title">${item.StationName.Zh_tw}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">${item.StationAddress.Zh_tw}</h6>
-        <p class="card-text mb-0">可租借車數：${item.AvailableRentBikes}</p>
-        <p class="card-text mt-0">可歸還車數：${item.AvailableReturnBikes}</p>
+        <h6 class="card-subtitle">${item.StationAddress.Zh_tw}</h6>
+        <p class="card-text">可租借車數：${item.AvailableRentBikes}</p>
+        <p class="card-text">可歸還車數：${item.AvailableReturnBikes}</p>
     </div>
     </div>`
                 );
@@ -176,14 +133,13 @@ window.addEventListener('load', () => {
 
     renderDefaultZone();
 
-    // 抓取選取文字
+    // 選取自行車的路線
     const cityElement = document.getElementById('bikeCity');
     cityElement.addEventListener('change', () => {
         const selectCityIndex = cityElement.selectedIndex;
         const cityKeys = Object.keys(cityList);
         const area = cityKeys[selectCityIndex];
         console.log(area);
-        // 選取自行車的路線
         console.log(`https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`);
         const areaURL = `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`;
         const bikeRoute = document.querySelector('#bikeRoute');
@@ -213,20 +169,28 @@ window.addEventListener('load', () => {
                         }
 
                         routeData.forEach(item => {
-                            // console.log(item)
+                            // console.log(item);
                             if (item.RouteName === value) {
                                 const geo = item.Geometry;
                                 // console.log(geo)
-
                                 // 畫線的方法
                                 polyLine(geo);
+                                const locationArray = item.Geometry.match(/[^MULTILINESTRING+^\(+^\+^ ),]+/g);
+                                const routeLongitude = locationArray.slice(0, 1);
+                                const routeLatitude = locationArray.slice(1, 2);
+                                // console.log(routeLongitude);
+                                // console.log(routeLatitude);
+                                setMarkerOfRoute(routeLongitude, routeLatitude);
                             }
                         });
                     });
                 })
+                .then(response => {})
                 .catch(error => console.log('error', error));
         }
         getRoutesData();
+
+        // 自行車道周邊車站
     });
 
     // 畫出自行車的路線 wicket 套件
@@ -250,5 +214,11 @@ window.addEventListener('load', () => {
         myLayer.addData(geojsonFeature);
         // zoom the map to the layer
         mymap.fitBounds(myLayer.getBounds());
+    }
+
+    function setMarkerOfRoute(routeLongitude, routeLatitude) {
+        console.log('車道代表經度', routeLongitude);
+        console.log('車道代表緯度', routeLatitude);
+        getStationData(routeLongitude, routeLatitude);
     }
 });
