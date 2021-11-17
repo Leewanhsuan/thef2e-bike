@@ -9,7 +9,8 @@ window.addEventListener('load', () => {
     var mymap = L.map('map').setView([25.0107036, 121.5040648], 15);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        attribution:
+            'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
         id: 'mapbox/streets-v11',
         tileSize: 512,
@@ -53,11 +54,10 @@ window.addEventListener('load', () => {
 
     function getStationData(longitude, latitude) {
         axios({
-                method: 'get',
-                // url: 'https://ptx.transportdata.tw/MOTC/v2/Bike/Station/Kaohsiung',
-                url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
-                headers: GetAuthorizationHeader(),
-            })
+            method: 'get',
+            url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
+            headers: GetAuthorizationHeader(),
+        })
             .then(response => {
                 console.log('租借站位資料', response);
                 data = response.data;
@@ -71,10 +71,10 @@ window.addEventListener('load', () => {
 
     function getAvailableData(longitude, latitude) {
         axios({
-                method: 'get',
-                url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
-                headers: GetAuthorizationHeader(),
-            })
+            method: 'get',
+            url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
+            headers: GetAuthorizationHeader(),
+        })
             .then(response => {
                 console.log('車位資料', response);
                 const availableData = response.data;
@@ -92,8 +92,8 @@ window.addEventListener('load', () => {
                 });
                 console.log('filterData', filterData);
                 setMarker();
-                createStationCardElement();
-                createRouteStationCardElement();
+
+                // createRouteStationCardElement();
             })
             .catch(error => console.log('error', error));
     }
@@ -105,14 +105,15 @@ window.addEventListener('load', () => {
                 iconUrl: './src/image/YoubikePin.png',
             });
             L.marker([item.StationPosition.PositionLat, item.StationPosition.PositionLon], {
-                    icon: myIcon,
-                })
+                icon: myIcon,
+            })
                 .addTo(mymap)
                 .bindPopup(
                     `<div class="bike-cards">
     <div class="bike-card">
         <h2 class="card-title">${item.StationName.Zh_tw}</h2>
         <h3 class="card-subtitle">${item.StationAddress.Zh_tw}</h3>
+        <h5 class="card-subtitle"><span>Youbike</span>${item.ServiceType}<span>.0</span></h5>
         <span class="card-text">可租借</span><span class="bike-numbers">${item.AvailableRentBikes}</span></br><span class="card-text">可歸還</span><span class="bike-numbers">${item.AvailableReturnBikes}</span>
         
     </div>
@@ -120,24 +121,28 @@ window.addEventListener('load', () => {
                 );
         });
     }
-    // 附近車站卡片
-    function createStationCardElement() {
-        createRouteStationCardElement.innerHTML = '';
-        createStationCardElement.innerHTML = '';
-        filterData.forEach(item => {
-            const createStationCardElement = document.getElementById('station-cards');
-            createStationCardElement.innerHTML += `
-        <div class="station-card">
-                    <span class="station-title">${item.StationName.Zh_tw}</span>
+
+    //車道資訊
+    function creatRouteCard(item) {
+        console.log(item);
+        const creatRouteCardElement = document.getElementById('route-cards');
+        creatRouteCardElement.innerHTML += `<div class="route-card">
+                    <span class="route-title">${item.RouteName}</span>
+                    <span class="route-length">全長<span class="cyclingLength">${(item.CyclingLength / 1000).toFixed(
+                        2
+                    )}</span>公里</span>
                     <div class="routeS2E">
-                        <span class="stationBorrowText">可租借</br><span class="borrowNumbers">${filterData.AvailableRentBikes}</span></span><span class="stationCapacityText">可歸還</br><span class="capacityNumbers">${filterData.AvailableReturnBikes}</span></span>
+                        <span class="routeStart">起點</br><span class="routeStartPlace">${
+                            item.RoadSectionStart
+                        }</span></span><span class="routeEnd">終點</br><span class="routeEndPlace">${
+            item.RoadSectionEnd
+        }</span></span>
                     </div>
                 </div>
     `;
-        });
     }
 
-    // 車道周邊車站卡片
+    // 車道附近美食卡片
     // function createRouteStationCardElement() {
     //     createRouteStationCardElement.innerHTML = '';
     //     createStationCardElement.innerHTML = '';
@@ -145,7 +150,7 @@ window.addEventListener('load', () => {
     //         const createRouteStationCardElement = document.getElementById('route-station-cards');
 
     //         createRouteStationCardElement.innerHTML += `
-    //     <div id="route-station-card">
+    //     <div class="route-station-card">
     //                 <span class="station-title">${item.StationName.Zh_tw}</span>
     //                 <div class="routeS2E">
     //                     <span class="stationBorrowText">可租借</br><span class="borrowNumbers">${filterData.AvailableRentBikes}</span></span><span class="stationCapacityText">可歸還</br><span class="capacityNumbers">${filterData.AvailableReturnBikes}</span></span>
@@ -186,10 +191,10 @@ window.addEventListener('load', () => {
 
         function getRoutesData() {
             axios({
-                    method: 'get',
-                    url: areaURL,
-                    headers: GetAuthorizationHeader(),
-                })
+                method: 'get',
+                url: areaURL,
+                headers: GetAuthorizationHeader(),
+            })
                 .then(response => {
                     console.log('自行車的路線', response);
                     const routeData = response.data;
@@ -202,20 +207,21 @@ window.addEventListener('load', () => {
 
                     bikeRoute.addEventListener('change', e => {
                         const value = e.target.value;
-                        // console.log(value)
+                        // console.log(value);
+                        // creatRouteCard(value);
 
                         if (myLayer) {
                             // console.log(myLayer);
-                            mymap.removeLayer(myLayer);
+                            mymap.removeLayer('myLayer:', myLayer);
                         }
 
                         routeData.forEach(item => {
-                            // console.log(item);
                             if (item.RouteName === value) {
                                 const geo = item.Geometry;
-                                // console.log(geo)
-                                // 畫線的方法
+                                // console.log(geo);
+                                // 畫線
                                 polyLine(geo);
+                                creatRouteCard(item);
 
                                 // 抓取自行車道周邊車站
                                 const locationArray = item.Geometry.match(/[^MULTILINESTRING+^\(+^\+^ ),]+/g);
