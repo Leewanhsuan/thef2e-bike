@@ -110,11 +110,9 @@ window.addEventListener('load', () => {
                     `<div class="bike-cards">
     <div class="bike-card">
         <h2 class="card-title">${item.StationName.Zh_tw}</h2>
-        <h5 class="card-subtitle">${item.StationAddress.Zh_tw}</h5>
-        <i class="fas fa-sign-out-alt"></i>
-        <span class="card-text">可租借車數：${item.AvailableRentBikes}</span></br>
-        <i class="fas fa-sign-in-alt"></i>
-        <span class="card-text">可歸還車數：${item.AvailableReturnBikes}</span>
+        <h3 class="card-subtitle">${item.StationAddress.Zh_tw}</h3>
+        <span class="card-text">可租借</span><span class="bike-numbers">${item.AvailableRentBikes}</span></br><span class="card-text">可歸還</span><span class="bike-numbers">${item.AvailableReturnBikes}</span>
+        
     </div>
     </div>`
                 );
