@@ -142,20 +142,63 @@ window.addEventListener('load', () => {
     `;
     }
 
-    // 車道附近美食卡片
-    // function createRouteStationCardElement() {
-    //     createRouteStationCardElement.innerHTML = '';
-    //     createStationCardElement.innerHTML = '';
-    //     filterData.forEach(item => {
-    //         const createRouteStationCardElement = document.getElementById('route-station-cards');
+    // 串接附近的美食資料
+    let foodCardData = [];
+    function getFoodData(longitude, latitude) {
+        axios({
+            method: 'get',
+            url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant?$top=30&$spatialFilter=nearby(${latitude}%2C${longitude}4%2C%201000)&$format=JSON`,
+            headers: GetAuthorizationHeader(),
+        }).then(response => {
+            // console.log('附近美食資訊', response);
+            foodData = response.data;
+            console.log('附近美食資訊', foodData);
+            // createFoodCardElement();
+            foodCardData.forEach(item => {
+                const createFoodCardElement = document.getElementById('food-cards');
+                createFoodCardElement.innerHTML = `<div id="food-card">
+                            <img
+                                class="food-image"
+                                src="${foodData.PictureUrl1}"
+                                alt="${foodData.PictureDescription1}"
+                            />
+                            <span class="food-title">${foodData.Name}</span>
+                            <span class="food-address"
+                                >${foodData.Address}<a
+                                    href="https://www.google.com.tw/maps/place/${foodData.Name}"
+                                    target="_blank"
+                                    ><i class="fas fa-map-pin"></i></a></span
+                            ><span class="food-phone"
+                                >${foodData.Phone}<a href="tel:${foodData.Phone}"><i class="fas fa-phone"></i></a
+                            ></span>
+                            <span class="food-openTime">${foodData.OpenTime}</span>
+                        </div>
+    `;
+            });
+        });
+    }
 
-    //         createRouteStationCardElement.innerHTML += `
-    //     <div class="route-station-card">
-    //                 <span class="station-title">${item.StationName.Zh_tw}</span>
-    //                 <div class="routeS2E">
-    //                     <span class="stationBorrowText">可租借</br><span class="borrowNumbers">${filterData.AvailableRentBikes}</span></span><span class="stationCapacityText">可歸還</br><span class="capacityNumbers">${filterData.AvailableReturnBikes}</span></span>
-    //                 </div>
-    //             </div>
+    // 車道附近美食卡片
+    // function createFoodCardElement() {
+    //     foodData.forEach(item => {
+    //         const createFoodCardElement = document.getElementById('food-cards');
+    //         createFoodCardElement.innerHTML = `<div id="food-card">
+    //                         <img
+    //                             class="food-image"
+    //                             src="${item.PictureUrl1}"
+    //                             alt="${item.PictureDescription1}"
+    //                         />
+    //                         <span class="food-title">${foodData.Name}</span>
+    //                         <span class="food-address"
+    //                             >${foodData.Address}<a
+    //                                 href="https://www.google.com.tw/maps/place/${foodData.Name}"
+    //                                 target="_blank"
+    //                                 ><i class="fas fa-map-pin"></i></a></span
+    //                         ><span class="food-phone"
+    //                             >${foodData.Phone}<a href="tel:${foodData.Phone}"><i class="fas fa-phone"></i></a
+    //                         ></span>
+    //                         <span class="food-openTime">${foodData.OpenTime}</span>
+    //                     </div>
     // `;
     //     });
     // }
@@ -230,6 +273,7 @@ window.addEventListener('load', () => {
                                 // console.log(routeLongitude);
                                 // console.log(routeLatitude);
                                 setMarkerOfRoute(routeLongitude, routeLatitude);
+                                findFoodNearbyRoute(routeLongitude, routeLatitude);
                             }
                         });
                     });
@@ -265,8 +309,14 @@ window.addEventListener('load', () => {
 
     // 渲染自行車道周邊車站
     function setMarkerOfRoute(routeLongitude, routeLatitude) {
+        // console.log('車道代表經度', routeLongitude);
+        // console.log('車道代表緯度', routeLatitude);
+        getStationData(routeLongitude, routeLatitude);
+    }
+
+    function findFoodNearbyRoute(routeLongitude, routeLatitude) {
         console.log('車道代表經度', routeLongitude);
         console.log('車道代表緯度', routeLatitude);
-        getStationData(routeLongitude, routeLatitude);
+        getFoodData(routeLongitude, routeLatitude);
     }
 });
