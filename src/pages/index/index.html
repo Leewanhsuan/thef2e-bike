@@ -33,12 +33,26 @@
                     </div>
                 </div>
             </div>
-            <div class="station-cards">
-                <div class="station-card">
+            <div id="station-cards">
+                <!-- <div id="station-card">
                     <span class="station-title">臺中市大安濱海自行車道</span>
                     <span class="youbike">Youbike<span class="youbikeVersion">2</span>.0</span>
                     <div class="routeS2E">
                         <span class="stationBorrowText">可租借</br><span class="borrowNumbers">14</span></span><span class="stationCapacityText">可歸還</br><span class="capacityNumbers">0</span></span>
+                    </div>
+                </div> -->
+            </div>
+            <div id="route-station-cards">
+                <div id="route-station-card">
+                    <span class="station-title">${item.StationName.Zh_tw}</span>
+                    <div class="routeS2E">
+                        <span class="stationBorrowText">可租借</br><span class="borrowNumbers">${filterData.AvailableRentBikes}</span></span><span class="stationCapacityText">可歸還</br><span class="capacityNumbers">${filterData.AvailableReturnBikes}</span></span>
+                    </div>
+                </div>
+                <div id="route-station-card">
+                    <span class="station-title">${item.StationName.Zh_tw}</span>
+                    <div class="routeS2E">
+                        <span class="stationBorrowText">可租借</br><span class="borrowNumbers">${filterData.AvailableRentBikes}</span></span><span class="stationCapacityText">可歸還</br><span class="capacityNumbers">${filterData.AvailableReturnBikes}</span></span>
                     </div>
                 </div>
             </div>

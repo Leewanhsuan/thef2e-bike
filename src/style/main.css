@@ -272,11 +272,21 @@ body {
 
 /* 左側 station-card */
 
-.station-cards {
+#station-cards {
     width: 80%;
     position: absolute;
     left: 30px;
-    top: 320px;
+    top: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#route-station-cards {
+    width: 80%;
+    position: absolute;
+    left: 280px;
+    top: 130px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;

@@ -9,8 +9,7 @@ window.addEventListener('load', () => {
     var mymap = L.map('map').setView([25.0107036, 121.5040648], 15);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution:
-            'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
         id: 'mapbox/streets-v11',
         tileSize: 512,
@@ -51,13 +50,14 @@ window.addEventListener('load', () => {
 
     // 串接附近的自行車租借站位資料
     let data = [];
+
     function getStationData(longitude, latitude) {
         axios({
-            method: 'get',
-            // url: 'https://ptx.transportdata.tw/MOTC/v2/Bike/Station/Kaohsiung',
-            url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
-            headers: GetAuthorizationHeader(),
-        })
+                method: 'get',
+                // url: 'https://ptx.transportdata.tw/MOTC/v2/Bike/Station/Kaohsiung',
+                url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
+                headers: GetAuthorizationHeader(),
+            })
             .then(response => {
                 console.log('租借站位資料', response);
                 data = response.data;
@@ -68,12 +68,13 @@ window.addEventListener('load', () => {
     }
     // 串接附近的即時車位資料
     let filterData = [];
+
     function getAvailableData(longitude, latitude) {
         axios({
-            method: 'get',
-            url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
-            headers: GetAuthorizationHeader(),
-        })
+                method: 'get',
+                url: `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/NearBy?$spatialFilter=nearby(${latitude},${longitude},500)`,
+                headers: GetAuthorizationHeader(),
+            })
             .then(response => {
                 console.log('車位資料', response);
                 const availableData = response.data;
@@ -90,8 +91,9 @@ window.addEventListener('load', () => {
                     });
                 });
                 console.log('filterData', filterData);
-
                 setMarker();
+                createStationCardElement();
+                createRouteStationCardElement();
             })
             .catch(error => console.log('error', error));
     }
@@ -103,8 +105,8 @@ window.addEventListener('load', () => {
                 iconUrl: './src/image/YoubikePin.png',
             });
             L.marker([item.StationPosition.PositionLat, item.StationPosition.PositionLon], {
-                icon: myIcon,
-            })
+                    icon: myIcon,
+                })
                 .addTo(mymap)
                 .bindPopup(
                     `<div class="bike-cards">
@@ -118,6 +120,40 @@ window.addEventListener('load', () => {
                 );
         });
     }
+    // 附近車站卡片
+    function createStationCardElement() {
+        createRouteStationCardElement.innerHTML = '';
+        createStationCardElement.innerHTML = '';
+        filterData.forEach(item => {
+            const createStationCardElement = document.getElementById('station-cards');
+            createStationCardElement.innerHTML += `
+        <div class="station-card">
+                    <span class="station-title">${item.StationName.Zh_tw}</span>
+                    <div class="routeS2E">
+                        <span class="stationBorrowText">可租借</br><span class="borrowNumbers">${filterData.AvailableRentBikes}</span></span><span class="stationCapacityText">可歸還</br><span class="capacityNumbers">${filterData.AvailableReturnBikes}</span></span>
+                    </div>
+                </div>
+    `;
+        });
+    }
+
+    // 車道周邊車站卡片
+    // function createRouteStationCardElement() {
+    //     createRouteStationCardElement.innerHTML = '';
+    //     createStationCardElement.innerHTML = '';
+    //     filterData.forEach(item => {
+    //         const createRouteStationCardElement = document.getElementById('route-station-cards');
+
+    //         createRouteStationCardElement.innerHTML += `
+    //     <div id="route-station-card">
+    //                 <span class="station-title">${item.StationName.Zh_tw}</span>
+    //                 <div class="routeS2E">
+    //                     <span class="stationBorrowText">可租借</br><span class="borrowNumbers">${filterData.AvailableRentBikes}</span></span><span class="stationCapacityText">可歸還</br><span class="capacityNumbers">${filterData.AvailableReturnBikes}</span></span>
+    //                 </div>
+    //             </div>
+    // `;
+    //     });
+    // }
 
     // 選取道路的縣市
     const renderDataRecord = () => {
@@ -147,12 +183,13 @@ window.addEventListener('load', () => {
         console.log(`https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`);
         const areaURL = `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`;
         const bikeRoute = document.querySelector('#bikeRoute');
+
         function getRoutesData() {
             axios({
-                method: 'get',
-                url: areaURL,
-                headers: GetAuthorizationHeader(),
-            })
+                    method: 'get',
+                    url: areaURL,
+                    headers: GetAuthorizationHeader(),
+                })
                 .then(response => {
                     console.log('自行車的路線', response);
                     const routeData = response.data;
