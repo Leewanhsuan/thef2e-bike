@@ -146,6 +146,7 @@ window.addEventListener('load', () => {
     let foodCardData = [];
     function getFoodData(longitude, latitude) {
         const createFoodCardElement = document.getElementById('food-cards');
+        const createNoFoodElement = document.getElementById('noFood');
         axios({
             method: 'get',
             url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant?$top=30&$spatialFilter=nearby(${latitude}%2C${longitude}4%2C%201000)&$format=JSON`,
@@ -167,6 +168,9 @@ window.addEventListener('load', () => {
                 };
                 createFoodCardElement.innerHTML += createFoodCard(itemData);
             });
+            if (foodData.length === 0) {
+                createNoFoodElement.innerHTML += `此站附近是美食沙漠，記得自備糧食 ᕦ(ò_óˇ)ᕤ`;
+            }
         });
     }
 
@@ -179,7 +183,7 @@ window.addEventListener('load', () => {
                                 src="${itemData.pictureUrl}"
                                 alt="${itemData.pictureDescription}"
                             />
-                            <span class="food-title">${itemData.name}</span>
+                            <span class="food-title">${itemData.name.slice(0, 12)}</span>
                             <span class="food-address"
                                 >${itemData.address}<a
                                     href="https://www.google.com.tw/maps/place/${itemData.name}"

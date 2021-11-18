@@ -42,10 +42,10 @@ body {
 /* logo 區域 */
 
 .logoBox {
-    position: relative;
-    width: 90%;
+    position: fixed;
+    width: 25%;
     height: 56px;
-    left: 5%;
+    left: 36px;
     top: 0px;
     z-index: 4;
     background: #ffffff;
@@ -83,7 +83,7 @@ body {
     align-items: flex-end;
     color: #2d2d2d;
     position: absolute;
-    left: 45%;
+    left: 48%;
     top: 25px;
 }
 
@@ -94,7 +94,7 @@ body {
     display: flex;
     flex-direction: row;
     position: relative;
-    top: 20px;
+    top: 80px;
     left: 7%;
     margin: auto 0;
 }
@@ -254,6 +254,7 @@ body {
 .routeStart {
     position: absolute;
     bottom: 10px;
+    width: 130px;
     top: 10px;
     left: 10px;
     font-style: normal;
@@ -278,6 +279,7 @@ body {
     font-weight: normal;
     font-size: 14px;
     line-height: 140%;
+    width: 130px;
 }
 
 .cyclingLength {
@@ -316,6 +318,8 @@ body {
     flex-direction: column;
     align-items: flex-start;
 }
+
+/* 美食卡片 */
 
 #food-cards {
     width: 80%;
@@ -371,6 +375,7 @@ body {
     top: 200px;
     font-size: 14px;
     padding-top: 10px;
+    margin-right: 10px;
 }
 
 .food-phone {
@@ -408,4 +413,13 @@ body {
 .fa-phone:hover {
     font-size: 20px;
     color: #f68300;
+}
+
+/* 美食沙漠提醒 */
+
+#noFood {
+    font-size: 20px;
+    position: absolute;
+    top: 220px;
+    left: 10%;
 }
