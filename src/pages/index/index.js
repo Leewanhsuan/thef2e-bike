@@ -145,63 +145,53 @@ window.addEventListener('load', () => {
     // 串接附近的美食資料
     let foodCardData = [];
     function getFoodData(longitude, latitude) {
+        const createFoodCardElement = document.getElementById('food-cards');
         axios({
             method: 'get',
             url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant?$top=30&$spatialFilter=nearby(${latitude}%2C${longitude}4%2C%201000)&$format=JSON`,
             headers: GetAuthorizationHeader(),
         }).then(response => {
-            // console.log('附近美食資訊', response);
-            foodData = response.data;
-            console.log('附近美食資訊', foodData);
-            // createFoodCardElement();
-            foodCardData.forEach(item => {
-                const createFoodCardElement = document.getElementById('food-cards');
-                createFoodCardElement.innerHTML = `<div id="food-card">
-                            <img
-                                class="food-image"
-                                src="${foodData.PictureUrl1}"
-                                alt="${foodData.PictureDescription1}"
-                            />
-                            <span class="food-title">${foodData.Name}</span>
-                            <span class="food-address"
-                                >${foodData.Address}<a
-                                    href="https://www.google.com.tw/maps/place/${foodData.Name}"
-                                    target="_blank"
-                                    ><i class="fas fa-map-pin"></i></a></span
-                            ><span class="food-phone"
-                                >${foodData.Phone}<a href="tel:${foodData.Phone}"><i class="fas fa-phone"></i></a
-                            ></span>
-                            <span class="food-openTime">${foodData.OpenTime}</span>
-                        </div>
-    `;
+            const foodData = response.data;
+            console.log('附近美食Data', foodData);
+            foodData.forEach((element, index) => {
+                const pictureUrl = element.Picture?.PictureUrl1 ?? `./img/notfound.png`;
+                const pictureDescription = element.Picture?.PictureDescription1 ?? `目前該餐廳沒有照片`;
+                const itemData = {
+                    pictureUrl: pictureUrl,
+                    pictureDescription: pictureDescription,
+                    name: element.Name,
+                    phone: element.Phone,
+                    address: element.Address,
+                    openTime: element.OpenTime,
+                    index: index,
+                };
+                createFoodCardElement.innerHTML += createFoodCard(itemData);
             });
         });
     }
 
     // 車道附近美食卡片
-    // function createFoodCardElement() {
-    //     foodData.forEach(item => {
-    //         const createFoodCardElement = document.getElementById('food-cards');
-    //         createFoodCardElement.innerHTML = `<div id="food-card">
-    //                         <img
-    //                             class="food-image"
-    //                             src="${item.PictureUrl1}"
-    //                             alt="${item.PictureDescription1}"
-    //                         />
-    //                         <span class="food-title">${foodData.Name}</span>
-    //                         <span class="food-address"
-    //                             >${foodData.Address}<a
-    //                                 href="https://www.google.com.tw/maps/place/${foodData.Name}"
-    //                                 target="_blank"
-    //                                 ><i class="fas fa-map-pin"></i></a></span
-    //                         ><span class="food-phone"
-    //                             >${foodData.Phone}<a href="tel:${foodData.Phone}"><i class="fas fa-phone"></i></a
-    //                         ></span>
-    //                         <span class="food-openTime">${foodData.OpenTime}</span>
-    //                     </div>
-    // `;
-    //     });
-    // }
+
+    const createFoodCard = itemData => {
+        return `<div id="food-card">
+                            <img
+                                class="food-image"
+                                src="${itemData.pictureUrl}"
+                                alt="${itemData.pictureDescription}"
+                            />
+                            <span class="food-title">${itemData.name}</span>
+                            <span class="food-address"
+                                >${itemData.address}<a
+                                    href="https://www.google.com.tw/maps/place/${itemData.name}"
+                                    target="_blank"
+                                    ><i class="fas fa-map-pin"></i></a></span
+                            ><span class="food-phone"
+                                >${itemData.phone}<a href="tel:${itemData.phone}"><i class="fas fa-phone"></i></a
+                            ></span>
+                            <span class="food-openTime">${itemData.openTime}</span>
+                        </div>
+    `;
+    };
 
     // 選取道路的縣市
     const renderDataRecord = () => {

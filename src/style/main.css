@@ -1,7 +1,7 @@
 #map {
     height: 1000px;
     width: 70%;
-    position: absolute;
+    position: fixed;
     top: 0px;
     right: 0px;
     display: block;
@@ -137,6 +137,7 @@ body {
     border-radius: 50px;
     border: 0px;
     z-index: 3;
+    position: fixed;
 }
 
 .myMOUSE:hover {
@@ -149,6 +150,14 @@ body {
 
 /* 點擊 marker 展開卡片 */
 
+.leaflet-popup-content-wrapper {
+    background-color: #e0e2fe;
+}
+
+.leaflet-popup-tip {
+    background: #e0e2fe;
+}
+
 .bike-card {
     width: 200px;
     height: 200px;
@@ -157,10 +166,11 @@ body {
 .card-subtitle {
     margin: 0;
     padding-top: 5px;
+    color: #3439b5;
 }
 
 .card-title {
-    color: #686ffc;
+    color: #131678;
 }
 
 .card-text {
@@ -170,20 +180,20 @@ body {
 
 .bike-numbers {
     font-size: 24px;
-    color: #686ffc;
+    color: #131678;
     padding-left: 50px;
     padding-top: 50px;
 }
 
 .fa-sign-out-alt {
-    color: #686ffc;
+    color: #131678;
     padding-right: 10px;
     padding-top: 10px;
     font-size: 20px;
 }
 
 .fa-sign-in-alt {
-    color: #686ffc;
+    color: #131678;
     padding-right: 10px;
     padding-top: 10px;
     font-size: 20px;
@@ -319,7 +329,7 @@ body {
 
 #food-card {
     width: 100%;
-    height: 300px;
+    height: 330px;
     background: #fff9cc;
     box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.15);
     border-radius: 9px;
@@ -352,10 +362,10 @@ body {
     font-weight: bold;
     font-size: 24px;
     line-height: 140%;
-    color: #f6a400;
+    color: #854b05;
 }
 
-.food-adress {
+.food-address {
     position: absolute;
     left: 25px;
     top: 200px;
@@ -381,7 +391,7 @@ body {
 
 .fa-map-pin {
     margin-left: 5px;
-    color: #f6a400;
+    color: #854b05;
     font-size: 16px;
 }
 .fa-map-pin:hover {
@@ -392,7 +402,7 @@ body {
 .fa-phone {
     margin-left: 5px;
     font-size: 14px;
-    color: #f6a400;
+    color: #854b05;
 }
 
 .fa-phone:hover {
