@@ -6,7 +6,7 @@ import { cityList } from '../../data';
  * 頁面載入處理事件
  */
 window.addEventListener('load', () => {
-    var mymap = L.map('map').setView([25.0107036, 121.5040648], 15);
+    var mymap = L.map('map', { dragging: false, tap: false }).setView([25.0107036, 121.5040648], 15);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution:
@@ -100,6 +100,7 @@ window.addEventListener('load', () => {
 
     // 標記所在位置附近 Ubike 站
     function setMarker() {
+        console.log;
         filterData.forEach(item => {
             const myIcon = L.icon({
                 iconUrl: './src/image/YoubikePin.png',
@@ -110,14 +111,13 @@ window.addEventListener('load', () => {
                 .addTo(mymap)
                 .bindPopup(
                     `<div class="bike-cards">
-    <div class="bike-card">
-        <h2 class="card-title">${item.StationName.Zh_tw}</h2>
-        <h3 class="card-subtitle">${item.StationAddress.Zh_tw}</h3>
-        <h5 class="card-subtitle"><span>Youbike</span>${item.ServiceType}<span>.0</span></h5>
-        <span class="card-text">可租借</span><span class="bike-numbers">${item.AvailableRentBikes}</span></br><span class="card-text">可歸還</span><span class="bike-numbers">${item.AvailableReturnBikes}</span>
-        
-    </div>
-    </div>`
+            <div class="bike-card">
+                <h2 class="card-title">${item.StationName.Zh_tw}</h2>
+                <h3 class="card-subtitle">${item.StationAddress.Zh_tw}</h3>
+                <h5 class="card-subtitle"><span>Youbike</span>${item.ServiceType}<span>.0</span></h5>
+                <span class="card-text">可租借</span><span class="bike-numbers">${item.AvailableRentBikes}</span></br><span class="card-text">可歸還</span><span class="bike-numbers">${item.AvailableReturnBikes}</span>
+            </div>
+            </div>`
                 );
         });
     }
@@ -155,7 +155,7 @@ window.addEventListener('load', () => {
             const foodData = response.data;
             console.log('附近美食Data', foodData);
             foodData.forEach((element, index) => {
-                const pictureUrl = element.Picture?.PictureUrl1 ?? `./img/notfound.png`;
+                const pictureUrl = element.Picture?.PictureUrl1 ?? `src/image/notfound.png`;
                 const pictureDescription = element.Picture?.PictureDescription1 ?? `目前該餐廳沒有照片`;
                 const itemData = {
                     pictureUrl: pictureUrl,
