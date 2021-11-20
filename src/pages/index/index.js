@@ -73,7 +73,6 @@ const getRoutesData = area => {
     })
         .then(response => {
             const routeData = response.data;
-
             let str = '';
             routeData.forEach(item => {
                 str += `<option value="${item.RouteName}">${item.RouteName}</option>`;
@@ -81,24 +80,31 @@ const getRoutesData = area => {
             bikeRoute.innerHTML = str;
             bikeRoute.addEventListener('change', e => {
                 const value = e.target.value;
-                routeData.forEach(item => {
-                    if (item.RouteName === value) {
-                        const geo = item.Geometry;
-                        polyLine(geo);
-                        createRouteCard(item);
-
-                        // 抓取自行車道周邊車站
-                        const locationArray = item.Geometry.match(/[^MULTILINESTRING+^\(+^\+^ ),]+/g);
-                        const routeLongitude = locationArray.slice(0, 1);
-                        const routeLatitude = locationArray.slice(1, 2);
-                        setMarkerOfRoute(routeLongitude, routeLatitude);
-                        findFoodNearbyRoute(routeLongitude, routeLatitude);
-                    }
-                });
+                renderMarkerRoute(routeData, value);
             });
+
+            // 城市選擇時，初始路線
+            renderMarkerRoute(routeData, routeData[0]?.RouteName);
         })
         .then(response => {})
         .catch(error => console.log('error', error));
+
+    const renderMarkerRoute = (routeData, locationName) => {
+        routeData.forEach(item => {
+            if (item.RouteName === locationName) {
+                const geo = item.Geometry;
+                polyLine(geo);
+                createRouteCard(item);
+
+                // 抓取自行車道周邊車站
+                const locationArray = item.Geometry.match(/[^MULTILINESTRING+^\(+^\+^ ),]+/g);
+                const routeLongitude = locationArray.slice(0, 1);
+                const routeLatitude = locationArray.slice(1, 2);
+                setMarkerOfRoute(routeLongitude, routeLatitude);
+                findFoodNearbyRoute(routeLongitude, routeLatitude);
+            }
+        });
+    };
 };
 
 // 畫出自行車的路線 wicket 套件
