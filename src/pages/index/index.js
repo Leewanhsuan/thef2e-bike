@@ -2,11 +2,14 @@ import '../../style/main.css';
 import { GetAuthorizationHeader } from '../../utils/commonApi';
 import { cityList } from '../../data';
 
+let mymap;
+
 /**
  * 頁面載入處理事件
  */
 window.addEventListener('load', () => {
-    var mymap = L.map('map', { dragging: false, tap: false }).setView([25.0107036, 121.5040648], 15);
+    mymap = L.map('map', { dragging: false, tap: false }).setView([25.0107036, 121.5040648], 15);
+    const markers = [];
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution:
@@ -57,13 +60,14 @@ window.addEventListener('load', () => {
             headers: GetAuthorizationHeader(),
         })
             .then(response => {
-                console.log('租借站位資料', response);
+                // console.log('租借站位資料', response);
                 data = response.data;
 
                 getAvailableData(longitude, latitude);
             })
             .catch(error => console.log('error', error));
     }
+
     // 串接附近的即時車位資料
     let filterData = [];
     function getAvailableData(longitude, latitude) {
@@ -73,9 +77,11 @@ window.addEventListener('load', () => {
             headers: GetAuthorizationHeader(),
         })
             .then(response => {
-                console.log('車位資料', response);
+                // console.log('車位資料', response);
                 const availableData = response.data;
 
+                // initial filterData
+                filterData = [];
                 // 比對
                 availableData.forEach(availableItem => {
                     data.forEach(stationItem => {
@@ -87,7 +93,7 @@ window.addEventListener('load', () => {
                         }
                     });
                 });
-                console.log('filterData', filterData);
+                // console.log('filterData', filterData);
                 setMarker();
 
                 // createRouteStationCardElement();
@@ -97,11 +103,15 @@ window.addEventListener('load', () => {
 
     // 標記所在位置附近 Ubike 站
     function setMarker() {
+        markers.map(item => {
+            mymap.removeLayer(item);
+        });
+
         filterData.forEach(item => {
             const myIcon = L.icon({
                 iconUrl: './src/image/YoubikePin.png',
             });
-            L.marker([item.StationPosition.PositionLat, item.StationPosition.PositionLon], {
+            const marker = L.marker([item.StationPosition.PositionLat, item.StationPosition.PositionLon], {
                 icon: myIcon,
             })
                 .addTo(mymap)
@@ -117,13 +127,15 @@ window.addEventListener('load', () => {
                         </div>
                     `
                 );
+            markers.push(marker);
         });
     }
 
     //車道資訊
     function creatRouteCard(item) {
-        console.log(item);
+        // console.log(item);
         const creatRouteCardElement = document.getElementById('route-cards');
+        creatRouteCardElement.innerHTML = '';
         creatRouteCardElement.innerHTML += `<div class="route-card">
                     <span class="route-title">${item.RouteName}</span>
                     <span class="route-length">全長<span class="cyclingLength">${(item.CyclingLength / 1000).toFixed(
@@ -151,7 +163,7 @@ window.addEventListener('load', () => {
             headers: GetAuthorizationHeader(),
         }).then(response => {
             const foodData = response.data;
-            console.log('附近美食Data', foodData);
+            // console.log('附近美食Data', foodData);
             foodData.forEach((element, index) => {
                 const pictureUrl = element.Picture?.PictureUrl1 ?? `src/image/notfound.png`;
                 const pictureDescription = element.Picture?.PictureDescription1 ?? `目前該餐廳沒有照片`;
@@ -167,7 +179,9 @@ window.addEventListener('load', () => {
                 createFoodCardElement.innerHTML += createFoodCard(itemData);
             });
             if (foodData.length === 0) {
-                createNoFoodElement.innerHTML += `此站附近是美食沙漠，記得自備糧食 ᕦ(ò_óˇ)ᕤ`;
+                createNoFoodElement.innerHTML = `此站附近是美食沙漠，記得自備糧食 ᕦ(ò_óˇ)ᕤ`;
+            } else {
+                createNoFoodElement.innerHTML = '';
             }
         });
     }
@@ -208,7 +222,6 @@ window.addEventListener('load', () => {
         const cityElement = document.getElementById('bikeRoute');
         cityElement.innerHTML += `<option class="form-select" value="">請先選擇城市</option>`;
     };
-
     renderDefaultZone();
 
     // 選取自行車的路線
@@ -217,8 +230,8 @@ window.addEventListener('load', () => {
         const selectCityIndex = cityElement.selectedIndex;
         const cityKeys = Object.keys(cityList);
         const area = cityKeys[selectCityIndex];
-        console.log(area);
-        console.log(`https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`);
+        // console.log(area);
+        // console.log(`https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`);
         const areaURL = `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/` + area + `?`;
         const bikeRoute = document.querySelector('#bikeRoute');
 
@@ -229,7 +242,7 @@ window.addEventListener('load', () => {
                 headers: GetAuthorizationHeader(),
             })
                 .then(response => {
-                    console.log('自行車的路線', response);
+                    // console.log('自行車的路線', response);
                     const routeData = response.data;
 
                     let str = '';
@@ -296,8 +309,8 @@ window.addEventListener('load', () => {
     }
 
     function findFoodNearbyRoute(routeLongitude, routeLatitude) {
-        console.log('車道代表經度', routeLongitude);
-        console.log('車道代表緯度', routeLatitude);
+        // console.log('車道代表經度', routeLongitude);
+        // console.log('車道代表緯度', routeLatitude);
         getFoodData(routeLongitude, routeLatitude);
     }
 });
