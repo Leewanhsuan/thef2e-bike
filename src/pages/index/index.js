@@ -73,7 +73,7 @@ const getRoutesData = area => {
     })
         .then(response => {
             const routeData = response.data;
-            let str = '';
+            let str = '<option class="form-select" value="">請先選擇城市</option>';
             routeData.forEach(item => {
                 str += `<option value="${item.RouteName}">${item.RouteName}</option>`;
             });
@@ -82,9 +82,6 @@ const getRoutesData = area => {
                 const value = e.target.value;
                 renderMarkerRoute(routeData, value);
             });
-
-            // 城市選擇時，初始路線
-            renderMarkerRoute(routeData, routeData[0]?.RouteName);
         })
         .then(response => {})
         .catch(error => console.log('error', error));
@@ -201,6 +198,7 @@ const getFoodData = (longitude, latitude) => {
         url: `https://ptx.transportdata.tw/MOTC/v2/Tourism/Restaurant?$top=30&$spatialFilter=nearby(${latitude}%2C${longitude}4%2C%201000)&$format=JSON`,
         headers: GetAuthorizationHeader(),
     }).then(response => {
+        createFoodCardElement.innerHTML = '';
         const foodData = response.data;
         foodData.forEach((element, index) => {
             const pictureUrl = element.Picture?.PictureUrl1 ?? `src/image/notfound.png`;

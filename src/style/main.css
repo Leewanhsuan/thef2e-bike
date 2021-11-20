@@ -261,6 +261,7 @@ body {
 .card-subtitle {
     margin: 0;
     padding-top: 5px;
+
     color: #3439b5;
 }
 
@@ -307,7 +308,7 @@ body {
 
 .route-card {
     width: 100%;
-    height: 150px;
+    height: 180px;
     background: #eafbd3;
     box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.15);
     border-radius: 9px;
@@ -330,7 +331,7 @@ body {
 .route-length {
     position: absolute;
     left: 25px;
-    top: 50px;
+    top: 80px;
     color: #0d5706;
     font-size: 16px;
     padding-top: 10px;
@@ -431,7 +432,7 @@ body {
     width: 80%;
     position: absolute;
     left: 30px;
-    top: 180px;
+    top: 200px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
