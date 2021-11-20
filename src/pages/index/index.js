@@ -19,7 +19,6 @@ window.addEventListener('load', () => {
     }).addTo(mymap);
 
     // navigator web api 獲取所在位置
-
     testClick.addEventListener('click', () => {
         geoFindMe();
     });
@@ -51,7 +50,6 @@ window.addEventListener('load', () => {
 
     // 串接附近的自行車租借站位資料
     let data = [];
-
     function getStationData(longitude, latitude) {
         axios({
             method: 'get',
@@ -68,7 +66,6 @@ window.addEventListener('load', () => {
     }
     // 串接附近的即時車位資料
     let filterData = [];
-
     function getAvailableData(longitude, latitude) {
         axios({
             method: 'get',
@@ -100,7 +97,6 @@ window.addEventListener('load', () => {
 
     // 標記所在位置附近 Ubike 站
     function setMarker() {
-        console.log;
         filterData.forEach(item => {
             const myIcon = L.icon({
                 iconUrl: './src/image/YoubikePin.png',
@@ -110,14 +106,16 @@ window.addEventListener('load', () => {
             })
                 .addTo(mymap)
                 .bindPopup(
-                    `<div class="bike-cards">
-            <div class="bike-card">
-                <h2 class="card-title">${item.StationName.Zh_tw}</h2>
-                <h3 class="card-subtitle">${item.StationAddress.Zh_tw}</h3>
-                <h5 class="card-subtitle"><span>Youbike</span>${item.ServiceType}<span>.0</span></h5>
-                <span class="card-text">可租借</span><span class="bike-numbers">${item.AvailableRentBikes}</span></br><span class="card-text">可歸還</span><span class="bike-numbers">${item.AvailableReturnBikes}</span>
-            </div>
-            </div>`
+                    `
+                        <div class="bike-cards">
+                            <div class="bike-card">
+                                <h2 class="card-title">${item.StationName.Zh_tw}</h2>
+                                <h3 class="card-subtitle">${item.StationAddress.Zh_tw}</h3>
+                                <h5 class="card-subtitle"><span>Youbike</span>${item.ServiceType}<span>.0</span></h5>
+                                <span class="card-text">可租借</span><span class="bike-numbers">${item.AvailableRentBikes}</span></br><span class="card-text">可歸還</span><span class="bike-numbers">${item.AvailableReturnBikes}</span>
+                            </div>
+                        </div>
+                    `
                 );
         });
     }
@@ -175,7 +173,6 @@ window.addEventListener('load', () => {
     }
 
     // 車道附近美食卡片
-
     const createFoodCard = itemData => {
         return `<div id="food-card">
                             <img
@@ -205,7 +202,6 @@ window.addEventListener('load', () => {
             cityElement.innerHTML += `<option class="form-select-city" value="">${element}</option>`;
         });
     };
-
     renderDataRecord();
 
     const renderDefaultZone = () => {
@@ -244,13 +240,6 @@ window.addEventListener('load', () => {
 
                     bikeRoute.addEventListener('change', e => {
                         const value = e.target.value;
-                        // console.log(value);
-                        // creatRouteCard(value);
-
-                        if (myLayer) {
-                            // console.log(myLayer);
-                            mymap.removeLayer('myLayer:', myLayer);
-                        }
 
                         routeData.forEach(item => {
                             if (item.RouteName === value) {
@@ -279,8 +268,6 @@ window.addEventListener('load', () => {
     });
 
     // 畫出自行車的路線 wicket 套件
-    let myLayer = null;
-
     function polyLine(geo) {
         // 建立一個 wkt 的實體
         const wicket = new Wkt.Wkt();

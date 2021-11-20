@@ -541,8 +541,18 @@ body {
     width: 30%;
     position: fixed;
     bottom: 0px;
-    background-color: #ffffff;
     font-size: 12px;
     color: #e0e2fe;
     text-align: center;
+}
+
+@media screen and (max-width: 480px) {
+    .footer {
+        width: 100%;
+        position: fixed;
+        bottom: 20px;
+        font-size: 10px;
+        color: #131678;
+        text-align: center;
+    }
 }
