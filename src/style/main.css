@@ -5,7 +5,7 @@
     top: 0px;
     right: 0px;
     display: block;
-    z-index: 0;
+    z-index: -100;
     overflow-y: hidden;
 }
 
@@ -14,11 +14,10 @@
         height: 1000px;
         width: 100%;
         position: fixed;
-        top: -120px;
+        top: -150px;
         right: 0px;
         display: block;
-        z-index: 0;
-        overflow-y: hidden;
+        z-index: -100;
     }
 }
 
@@ -43,18 +42,18 @@ body {
 }
 
 .sideBar {
-    height: 1000px;
+    height: 300px;
     width: 30%;
     position: absolute;
     top: 0px;
     left: 0px;
     display: block;
-    z-index: 3;
+    z-index: 0;
 }
 
 @media screen and (max-width: 480px) {
     .sideBar {
-        height: 1000px;
+        height: 150px;
         width: 100%;
         position: absolute;
         top: 10px;
@@ -72,7 +71,7 @@ body {
     height: 56px;
     left: 36px;
     top: 0px;
-    z-index: 4;
+    z-index: 100;
     background: #ffffff;
     box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.15);
     border-radius: 0px 0px 9px 9px;
@@ -249,8 +248,22 @@ body {
     background-color: #e0e2fe;
 }
 
+@media screen and (max-width: 480px) {
+    .leaflet-popup-content-wrapper {
+        background-color: #e0e2fe;
+        z-index: 100;
+    }
+}
+
 .leaflet-popup-tip {
     background: #e0e2fe;
+}
+
+@media screen and (max-width: 480px) {
+    .leaflet-popup-tip {
+        background: #e0e2fe;
+        z-index: 100;
+    }
 }
 
 .bike-card {
@@ -296,6 +309,28 @@ body {
 }
 
 /* 左側 route-card */
+#cards-div {
+    height: 700px;
+    width: 30%;
+    position: absolute;
+    top: 150px;
+    left: 0px;
+    display: block;
+    z-index: 0;
+}
+
+@media screen and (max-width: 480px) {
+    #cards-div {
+        width: 100%;
+        position: absolute;
+        left: 0px;
+        top: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        z-index: 0;
+    }
+}
 
 .route-cards {
     width: 80%;
@@ -304,6 +339,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+@media screen and (max-width: 480px) {
+    .route-cards {
+        width: 80%;
+        position: absolute;
+        top: 130px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        z-index: 10;
+    }
 }
 
 .route-card {
@@ -316,6 +363,21 @@ body {
     top: 20px;
     left: 15px;
     padding-top: 20px;
+}
+
+@media screen and (max-width: 480px) {
+    .route-card {
+        width: 100%;
+        height: 180px;
+        background: #eafbd3;
+        box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.15);
+        border-radius: 9px;
+        position: relative;
+        top: 20px;
+        left: 15px;
+        padding-top: 20px;
+        z-index: 20;
+    }
 }
 
 .route-title {
@@ -383,38 +445,6 @@ body {
 }
 
 /* 左側 station-card */
-
-#cards-div {
-    width: 100%;
-    position: absolute;
-    left: 0px;
-    top: 130px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-@media screen and (max-width: 480px) {
-    #cards-div {
-        width: 100%;
-        position: absolute;
-        left: 0px;
-        top: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
-/* #station-cards {
-    width: 80%;
-    position: absolute;
-    left: 30px;
-    top: 130px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-} */
 
 #route-cards {
     width: 80%;

@@ -10,7 +10,7 @@ const markers = [];
  */
 window.addEventListener('load', () => {
     const [initialLongitude, initialLatitude] = [25.0107036, 121.5040648];
-    map = L.map('map', { dragging: false, tap: false }).setView([initialLongitude, initialLatitude], 15);
+    map = L.map('map').setView([initialLongitude, initialLatitude], 15);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: `Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,
         maxZoom: 18,
