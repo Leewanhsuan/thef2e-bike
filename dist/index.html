@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>LULU</title>
+        <link rel="icon" href="src/image/lululogo.ico" type="image" />
+        <!-- leaflet css-->
+        <link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css" />
+        <!-- fontawesome -->
+        <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+            integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm"
+            crossorigin="anonymous"
+        />
+        <!-- Google Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" />
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="sideBar">
+                <div class="logoBox">
+                    <img class="logoBox-logo" src="./src/image/lululogo.png" alt="嚕路Logo" />
+                    <span class="title1">嚕路</span><span class="title2">自行車道週邊美食整合網</span>
+                </div>
+                <div class="select-group">
+                    <select class="form-select-city" id="bikeCity" aria-label="縣市"> </select>
+                    <select class="form-select" id="bikeRoute" aria-label="自行車道"> </select>
+                </div>
+            </div>
+            <div id="cards-div">
+                <div id="route-cards">
+                    <!-- <div class="route-card">
+                    <span class="route-title">臺中市大安濱海自行車道</span>
+                    <span class="route-length">全長<span class="cyclingLength">26</span>公里</span>
+                    <div class="routeS2E">
+                        <span class="routeStart">起點</br><span class="routeStartPlace">頂安海堤安心橋</span></span><span class="routeEnd">終點</br><span class="routeEndPlace">台61縣西部濱海公路南下144公里</span></span>
+                    </div>
+                </div> -->
+                </div>
+                <div id="noFood"></div>
+                <div id="food-cards">
+                    <!-- <div id="food-card">
+                            <img
+                                class="food-image"
+                                src="https://newtaipei.travel/content/images/shops/13578/640x480_1249f8b640600000493c.jpg"
+                                alt="八里亭麵館店內一景"
+                            />
+                            <span class="food-title">八里亭麵館</span>
+                            <span class="food-adress"
+                                >新北市234永和區中山路一段293號1樓<a
+                                    href="https://www.google.com.tw/maps/place/八里亭麵館"
+                                    target="_blank"
+                                    ><i class="fas fa-map-pin"></i></a></span
+                            ><span class="food-phone"
+                                >886-2-29291108<a href="tel:555-555-5555"><i class="fas fa-phone"></i></a
+                            ></span>
+                            <span class="food-openTime">11:00-14:00 、17:00-20:00(每週二公休)</span>
+                        </div> -->
+                </div>
+            </div>
+
+            <div class="mapdiv">
+                <button id="testClick" class="myMOUSE"><i class="fas fa-location-arrow"></i></button>
+                <div id="map" tap="{false}"></div>
+            </div>
+            <div class="footer">LULU© Code: 珊迪 Design: Stephanie Chang</div>
+        </div>
+
+        <!-- leaflet js-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script>
+        <!-- axios -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <!-- jsSHA -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.2.0/sha.js"></script>
+        <!-- wicket -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/wicket/1.3.8/wicket.min.js"
+            integrity="sha512-aaiN+QIXD0N9Id865vSDEfttZJV9v8ZGh7jXMnYI2zbZhkSYOulS4IH0u4pC61/KXT20UedYzL5xi5siIg6mlw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+    <script type="text/javascript" src="/js/index.js"></script></body>
+</html>
